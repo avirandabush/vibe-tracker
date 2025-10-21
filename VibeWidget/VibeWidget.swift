@@ -20,22 +20,44 @@ struct Provider: TimelineProvider {
     
     func placeholder(in context: Context) -> SimpleEntry {
         let data = loadVibeData()
-        return SimpleEntry(date: Date(), emoji: data.emoji, pickCount: data.count)
+        return SimpleEntry(date: Date(), emoji: data.emoji, pickCount: data.count, showStreak: false)
     }
     
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
         let data = loadVibeData()
-        let entry = SimpleEntry(date: Date(), emoji: data.emoji, pickCount: data.count)
+        let entry = SimpleEntry(date: Date(), emoji: data.emoji, pickCount: data.count, showStreak: false)
         completion(entry)
     }
-    
+
     func getTimeline(in context: Context, completion: @escaping (Timeline<SimpleEntry>) -> ()) {
+        
+        var entries: [SimpleEntry] = []
+        let store = VibeStore.shared
         let data = loadVibeData()
-        let entry = SimpleEntry(date: Date(), emoji: data.emoji, pickCount: data.count)
-        
-        let nextUpdate = Calendar.current.date(byAdding: .minute, value: 30, to: Date())!
-        let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
-        
+        let picksThisWeek = store.picksThisWeek()
+        let isStreak = picksThisWeek > 0 && picksThisWeek % 7 == 0
+        let currentEntry = SimpleEntry(date: Date(),
+                                       emoji: data.emoji,
+                                       pickCount: data.count,
+                                       showStreak: isStreak)
+        entries.append(currentEntry)
+
+        if isStreak {
+            let hideMilestoneDate = Calendar.current.date(byAdding: .second, value: 3, to: Date()) ?? Date()
+            
+            let hideEntry = SimpleEntry(date: hideMilestoneDate,
+                                        emoji: data.emoji,
+                                        pickCount: data.count,
+                                        showStreak: false)
+            entries.append(hideEntry)
+            
+            let timeline = Timeline(entries: entries, policy: .after(hideEntry.date))
+            completion(timeline)
+            return
+        }
+
+        let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
+        let timeline = Timeline(entries: entries, policy: .after(nextUpdate))
         completion(timeline)
     }
 }
@@ -44,6 +66,7 @@ struct SimpleEntry: TimelineEntry {
     let date: Date
     let emoji: String
     let pickCount: Int
+    let showStreak: Bool
 }
 
 // MARK: - View
@@ -94,11 +117,11 @@ struct VibeWidget: Widget {
 #Preview(as: .systemSmall) {
     VibeWidget()
 } timeline: {
-    SimpleEntry(date: .now, emoji: "💪", pickCount: 15)
+    SimpleEntry(date: .now, emoji: "💪", pickCount: 15, showStreak: false)
 }
 
 #Preview(as: .systemMedium) {
     VibeWidget()
 } timeline: {
-    SimpleEntry(date: .now, emoji: "😂", pickCount: 27)
+    SimpleEntry(date: .now, emoji: "😂", pickCount: 27, showStreak: false)
 }

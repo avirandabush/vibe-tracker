@@ -11,19 +11,27 @@ struct MediumVibeView: View {
     var entry: Provider.Entry
     
     var body: some View {
-        HStack {
-            SmallVibeView(entry: entry)
-                .frame(maxWidth: .infinity)
-                .padding(.trailing, 4)
+        ZStack {
+            HStack {
+                SmallVibeView(entry: entry)
+                    .frame(maxWidth: .infinity)
+                    .padding(.trailing, 4)
+                
+                Divider()
+                    .overlay(.gray)
+                
+                VibeSelectorView()
+                    .frame(maxWidth: .infinity)
+                    .padding(.leading, 4)
+            }
+            .opacity(entry.showStreak ? 0.2 : 1.0)
             
-            Divider()
-                .overlay(.gray)
-            
-            VibeSelectorView()
-                .frame(maxWidth: .infinity)
-                .padding(.leading, 4)
+            if entry.showStreak {
+                WidgetStreakView(count: entry.pickCount)
+            }
         }
-        .padding(8)
+        .padding(4)
+        .animation(.easeInOut(duration: 0.5), value: entry.showStreak)
     }
 }
 
