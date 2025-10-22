@@ -17,6 +17,8 @@ struct ContentView: View {
                 .ignoresSafeArea()
             
             VStack {
+                Spacer()
+                
                 Text("Pick your vibe")
                     .foregroundStyle(.white)
                     .font(.title2)
@@ -50,6 +52,12 @@ struct ContentView: View {
                     .foregroundStyle(.white)
                     .font(.subheadline)
                     .padding(.top, 6)
+                
+                StreakProgressView(percentage: viewModel.streakProgressPercentage,
+                                   streakGoal: viewModel.streakGoal,
+                                   picksInCurrentStreak: viewModel.picksInCurrentStreak)
+                    .padding(.horizontal, 100)
+                    .padding(.vertical, 50)
             }
             
             if viewModel.showDuplicateToast {

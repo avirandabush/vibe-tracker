@@ -16,11 +16,21 @@ final class VibeViewModel: ObservableObject {
     @Published var lastPickWasMilestone: Bool = false
     
     private let store: VibeStore
+    let streakGoal: Int = 7
     
     init(store: VibeStore = .shared) {
         self.store = store
         self.selectedVibe = store.loadSelectedVibe()
         self.picksThisWeek = store.picksThisWeek()
+    }
+    
+    var picksInCurrentStreak: Int {
+        let picks = picksThisWeek % streakGoal
+        return picks == 0 && picksThisWeek > 0 ? streakGoal : picks
+    }
+    
+    var streakProgressPercentage: Double {
+        return Double(picksInCurrentStreak) / Double(streakGoal)
     }
     
     func selectVibe(_ vibe: Vibe) {
