@@ -65,12 +65,12 @@ struct ContentView: View {
                     .animation(.easeInOut(duration: 0.3), value: viewModel.showDuplicateToast)
             }
             
-            if viewModel.lastPickWasMilestone {
+            if viewModel.lastPickWasStreak {
                 Color.black.opacity(0.7)
                     .ignoresSafeArea()
                     .blur(radius: 8)
                     .transition(.opacity)
-                    .animation(.easeInOut, value: viewModel.lastPickWasMilestone)
+                    .animation(.easeInOut, value: viewModel.lastPickWasStreak)
                 
                 StreakView()
                     .frame(height: 180)

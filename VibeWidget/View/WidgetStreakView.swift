@@ -17,7 +17,7 @@ struct WidgetStreakView: View {
                 .fill(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
             
             VStack {
-                Text("🎉 Milestone! 🎉")
+                Text("🎉 Streak! 🎉")
                     .font(isSmall ? .caption : .headline)
                     .foregroundColor(.yellow)
                     .transition(.opacity.combined(with: .scale))

@@ -13,7 +13,7 @@ final class VibeViewModel: ObservableObject {
     @Published var selectedVibe: Vibe?
     @Published var picksThisWeek: Int = 0
     @Published var showDuplicateToast = false
-    @Published var lastPickWasMilestone: Bool = false
+    @Published var lastPickWasStreak: Bool = false
     
     private let store: VibeStore
     let streakGoal: Int = 7
@@ -51,9 +51,9 @@ final class VibeViewModel: ObservableObject {
             WidgetCenter.shared.reloadTimelines(ofKind: "VibeWidget")
             
             if picksThisWeek % 7 == 0 {
-                lastPickWasMilestone = true
+                lastPickWasStreak = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
-                    self?.lastPickWasMilestone = false
+                    self?.lastPickWasStreak = false
                 }
             }
         case .failed:

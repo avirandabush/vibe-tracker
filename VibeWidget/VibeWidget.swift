@@ -13,7 +13,6 @@ struct Provider: TimelineProvider {
         let store = VibeStore.shared
         let selectedVibe = store.loadSelectedVibe()
         let count = store.picksThisWeek()
-        let streakCount = store.picksThisWeek()
         
         let emoji = selectedVibe?.emoji ?? "🤔"
         return (emoji: emoji, count: count)
@@ -33,7 +32,6 @@ struct Provider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<SimpleEntry>) -> ()) {
         
         var entries: [SimpleEntry] = []
-        let store = VibeStore.shared
         let data = loadVibeData()
         let picksThisWeek = data.count
         let isStreak = picksThisWeek > 0 && picksThisWeek % 7 == 0
@@ -44,9 +42,9 @@ struct Provider: TimelineProvider {
         entries.append(currentEntry)
 
         if isStreak {
-            let hideMilestoneDate = Calendar.current.date(byAdding: .second, value: 3, to: Date()) ?? Date()
+            let hideStreakDate = Calendar.current.date(byAdding: .second, value: 3, to: Date()) ?? Date()
             
-            let hideEntry = SimpleEntry(date: hideMilestoneDate,
+            let hideEntry = SimpleEntry(date: hideStreakDate,
                                         emoji: data.emoji,
                                         pickCount: data.count,
                                         showStreak: false)
