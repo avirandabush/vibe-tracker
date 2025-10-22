@@ -65,6 +65,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Intent/SelectVibeIntent.swift,
+				View/WidgetProgressView.swift,
 			);
 			target = 98D4BBE22EA7DEFA003392F5 /* VibeTracker */;
 		};

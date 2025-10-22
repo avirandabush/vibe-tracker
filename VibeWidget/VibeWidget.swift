@@ -12,7 +12,8 @@ struct Provider: TimelineProvider {
     private func loadVibeData() -> (emoji: String, count: Int) {
         let store = VibeStore.shared
         let selectedVibe = store.loadSelectedVibe()
-        let count = store.allPickDates().count
+        let count = store.picksThisWeek()
+        let streakCount = store.picksThisWeek()
         
         let emoji = selectedVibe?.emoji ?? "🤔"
         return (emoji: emoji, count: count)
@@ -34,7 +35,7 @@ struct Provider: TimelineProvider {
         var entries: [SimpleEntry] = []
         let store = VibeStore.shared
         let data = loadVibeData()
-        let picksThisWeek = store.picksThisWeek()
+        let picksThisWeek = data.count
         let isStreak = picksThisWeek > 0 && picksThisWeek % 7 == 0
         let currentEntry = SimpleEntry(date: Date(),
                                        emoji: data.emoji,
@@ -67,6 +68,20 @@ struct SimpleEntry: TimelineEntry {
     let emoji: String
     let pickCount: Int
     let showStreak: Bool
+    
+    let streakGoal = 7
+    var picksInCurrentStreak: Int {
+        let picks = pickCount % streakGoal
+        return picks == 0 && pickCount > 0 ? streakGoal : picks
+    }
+    
+    var streakProgressPercentage: Double {
+        return Double(picksInCurrentStreak) / Double(streakGoal)
+    }
+    
+    var streakStatusText: String {
+        return "\(picksInCurrentStreak) / \(streakGoal)"
+    }
 }
 
 // MARK: - View

@@ -38,6 +38,12 @@ struct MediumVibeView: View {
 struct VibeSelectorView: View {
     var body: some View {
         VStack(spacing: 6) {
+            Text("Pick your vibe")
+                .foregroundStyle(.white)
+                .font(.caption2)
+                .bold()
+                .minimumScaleFactor(0.8)
+            
             HStack(spacing: 8) {
                 VibeButtonView(vibe: .focus)
                 VibeButtonView(vibe: .power)

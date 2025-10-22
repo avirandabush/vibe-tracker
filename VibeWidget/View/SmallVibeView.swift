@@ -18,11 +18,16 @@ struct SmallVibeView: View {
                 
                 Spacer()
                 
-                Text("Vibes: \(entry.pickCount)")
+                Text("Vibes this week: \(entry.pickCount)")
                     .font(.caption2)
                     .bold()
                     .minimumScaleFactor(0.8)
                     .foregroundColor(.white)
+                
+                WidgetProgressView(percentage: entry.streakProgressPercentage,
+                                   streakStatusText: "streak: \(entry.streakStatusText)")
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
             }
             .opacity(entry.showStreak ? 0.2 : 1.0)
             
