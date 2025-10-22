@@ -17,7 +17,6 @@ struct StreakProgressView: View {
             Circle()
                 .stroke(.white.opacity(0.1), lineWidth: 15)
             
-//            let percentage = viewModel.streakProgressPercentage
             Circle()
                 .trim(from: 0, to: percentage)
                 .stroke(.blue, style: StrokeStyle(lineWidth: 15, lineCap: .round, lineJoin: .round))
